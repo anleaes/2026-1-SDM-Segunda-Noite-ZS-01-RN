@@ -8,6 +8,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { WebBadge } from '@/components/web-badge';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import { Href, Redirect } from 'expo-router';
 
 function getDevMenuHint() {
   if (Platform.OS === 'web') {
@@ -60,7 +61,9 @@ export default function HomeScreen() {
     </ThemedView>
   );
 }
-
+export default function Index() {
+  return <Redirect href="/(drawer)" /> as unknown as Href;
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
