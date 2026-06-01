@@ -5,7 +5,7 @@ import {
   StyleSheet, Text, TextInput, TouchableOpacity,
 } from 'react-native';
 
-// ⚠️ Emulador Android: 10.0.2.2 | Dispositivo físico: IP da sua máquina
+
 const API_URL = 'http://10.0.2.2:8000';
 
 export default function CadastrarFilmeScreen() {
@@ -16,7 +16,7 @@ export default function CadastrarFilmeScreen() {
   const [classificacao, setClassificacao] = useState('');
   const [saving, setSaving] = useState(false);
 
-  // Limpa o formulário toda vez que a tela recebe foco
+
   useFocusEffect(
     useCallback(() => {
       setTitulo(''); setGeneroId(''); setDuracao(''); setClassificacao('');
@@ -35,7 +35,7 @@ export default function CadastrarFilmeScreen() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           titulo,
-          genero: Number(generoId),  // FK — ID do gênero (consulte GET /generos/)
+          genero: Number(generoId),  
           duracao: Number(duracao),
           classificacao,
         }),

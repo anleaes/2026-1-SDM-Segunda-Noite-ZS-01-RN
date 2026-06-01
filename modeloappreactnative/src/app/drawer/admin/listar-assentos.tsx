@@ -11,13 +11,13 @@ const API_URL = 'http://10.0.2.2:8000';
 export type Assento = {
   id: number;
   numero: number;
-  fila: string;        // ← campo correto do backend (era 'fileira')
-  status: boolean;     // ← boolean: false = disponível, true = ocupado
+  fila: string;        
+  status: boolean;     
   id_sala: number;
 };
 
 const statusColor = (status: boolean) =>
-  status ? '#155724' : '#721c24';  // true = disponível (verde), false = indisponível (vermelho)
+  status ? '#155724' : '#721c24';  
 
 const statusLabel = (status: boolean) =>
   status ? 'disponivel' : 'indisponivel';
