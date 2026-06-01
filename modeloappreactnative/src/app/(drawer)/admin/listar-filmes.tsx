@@ -7,7 +7,7 @@ import {
   Text, TouchableOpacity, View,
 } from 'react-native';
 
-const API_URL = 'http://10.0.2.2:8000';
+import { API_URL } from '@/constants/api';
 
 type Filme = {
   id: number;
