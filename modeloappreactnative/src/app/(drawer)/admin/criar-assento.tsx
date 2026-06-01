@@ -5,7 +5,7 @@ import {
   StyleSheet, Text, TextInput, TouchableOpacity,
 } from 'react-native';
 
-const API_URL = 'http://10.0.2.2:8000';
+import { API_URL } from '@/constants/api';
 
 export default function CriarAssentoScreen() {
   const router = useRouter();
