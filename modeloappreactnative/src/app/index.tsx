@@ -61,9 +61,10 @@ export default function HomeScreen() {
     </ThemedView>
   );
 }
-export default function Index() {
-  return <Redirect href="/(drawer)" /> as unknown as Href;
+export function Index() {
+  return <Redirect href="/(drawer)" />;
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
