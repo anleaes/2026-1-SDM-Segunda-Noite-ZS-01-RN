@@ -6,6 +6,8 @@ import {
 } from 'react-native';
 
 import { API_URL } from '@/constants/api';
+import { Alert } from 'react-native';
+
 const TIPOS_INGRESSO = ['Inteira', 'Meia (estudante)', 'Idoso', 'Cortesia'];
 
 type AssentoDisponivel = {
@@ -45,6 +47,50 @@ export default function ComprarIngressoScreen() {
     setSelecionados(prev =>
       prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
     );
+  };
+
+  const handleContinuar = async () => {
+    if (selecionados.length === 0) return;
+    try {
+      const pedidoRes = await fetch(`${API_URL}/pedido/api/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'criado' }),
+      });
+      if (!pedidoRes.ok) {
+        Alert.alert('Erro', 'Não foi possível criar o pedido.'); return;
+      }
+      const pedido = await pedidoRes.json();
+  
+      for (const assentoId of selecionados) {
+        await fetch(`${API_URL}/ingresso/api/`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            pedido: pedido.id,
+            sessao: Number(sessaoId),
+            assento: assentoId,
+            codigoQR: `QR-${pedido.id}-${assentoId}-${Date.now()}`,
+            ingressoMeiaEntrada: tipoIngresso !== 'Inteira',
+          }),
+        });
+      }
+  
+      const nomesSelecionados = assentos
+        .filter(a => selecionados.includes(a.id))
+        .map(a => `${a.fila}${a.numero}`);
+  
+      router.push({
+        pathname: '/(drawer)/cliente/compra-confirmacao',
+        params: {
+          pedidoId: pedido.id,
+          filmeTitulo,
+          assentos: JSON.stringify(nomesSelecionados),
+        },
+      });
+    } catch {
+      Alert.alert('Erro', 'Sem conexão com o servidor.');
+    }
   };
 
   const renderAssento = ({ item }: { item: AssentoDisponivel }) => {
@@ -106,6 +152,7 @@ export default function ComprarIngressoScreen() {
       )}
 
       <TouchableOpacity
+        onPress={handleContinuar}
         style={[styles.btnComprar, selecionados.length === 0 && styles.btnDisabled]}
         disabled={selecionados.length === 0}
       >
