@@ -12,3 +12,11 @@ export default function TabLayout() {
     </ThemeProvider>
   );
 }
+
+export function RootLayout() {
+  return (
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="(drawer)" />
+    </Stack>
+  );
+}
