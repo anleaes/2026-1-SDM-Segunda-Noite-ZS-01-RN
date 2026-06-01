@@ -1,4 +1,4 @@
-import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
+import { DrawerContentScrollView, DrawerItemList } from 'expo-router/build/react-navigation/drawer';
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 

@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { Href, useRouter } from 'expo-router';
 import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
@@ -17,7 +17,7 @@ export default function HomeScreen() {
       <Text style={styles.sectionTitle}>Para clientes</Text>
       <View style={styles.grid}>
         <TouchableOpacity style={styles.gridCard}
-          onPress={() => router.push('/(drawer)/cliente/listar-filmes')}>
+          onPress={() => router.push('/(drawer)/cliente/listar-filmes' as Href)}> 
           <Ionicons name="film-outline" size={32} color="#c40000" />
           <Text style={styles.gridText}>Ver filmes</Text>
         </TouchableOpacity>
@@ -26,19 +26,19 @@ export default function HomeScreen() {
       <Text style={styles.sectionTitle}>Administração</Text>
       <View style={styles.grid}>
         <TouchableOpacity style={styles.gridCard}
-          onPress={() => router.push('/(drawer)/admin/listar-filmes')}>
+          onPress={() => router.push('/(drawer)/admin/listar-filmes' as Href)}>
           <Ionicons name="film-outline" size={28} color="#c40000" />
           <Text style={styles.gridText}>Gerenciar filmes</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.gridCard}
-          onPress={() => router.push('/(drawer)/admin/listar-assentos')}>
+          onPress={() => router.push('/(drawer)/admin/listar-assentos' as Href)}>
           <Ionicons name="grid-outline" size={28} color="#c40000" />
           <Text style={styles.gridText}>Gerenciar assentos</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.gridCard}
-          onPress={() => router.push('/(drawer)/admin/cadastrar-usuario')}>
+          onPress={() => router.push('/(drawer)/admin/cadastrar-usuario' as Href)}>
           <Ionicons name="person-add-outline" size={28} color="#c40000" />
           <Text style={styles.gridText}>Novo usuário</Text>
         </TouchableOpacity>

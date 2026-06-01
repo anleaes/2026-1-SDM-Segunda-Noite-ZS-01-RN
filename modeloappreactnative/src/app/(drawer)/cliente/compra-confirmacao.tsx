@@ -1,4 +1,4 @@
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { Href, useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
@@ -47,12 +47,12 @@ export default function CompraConfirmacaoScreen() {
       </Text>
 
       <TouchableOpacity style={styles.btnFilmes}
-        onPress={() => router.push('/(drawer)/cliente/listar-filmes')}>
+        onPress={() => router.push('/(drawer)/cliente/listar-filmes' as Href)}>
         <Text style={styles.btnTexto}>Ver outros filmes</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.btnHome}
-        onPress={() => router.push('/(drawer)')}>
+        onPress={() => router.push('/(drawer)' as Href)}>
         <Text style={[styles.btnTexto, { color: '#c40000' }]}>Ir para o início</Text>
       </TouchableOpacity>
     </ScrollView>
