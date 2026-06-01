@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useFocusEffect, useRouter } from 'expo-router';
+import { Alert } from 'react-native'
+import { Href, useFocusEffect, useRouter } from 'expo-router';
 import React, { useCallback, useState } from 'react';
 import {
   ActivityIndicator, FlatList, StyleSheet,
@@ -21,6 +22,15 @@ export default function ListarFilmesAdminScreen() {
   const [filmes, setFilmes] = useState<Filme[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const handleDelete = async (id: number) => {
+  try {
+    await fetch(`${API_URL}/filmes/${id}/`, { method: 'DELETE' });
+    setFilmes(prev => prev.filter(f => f.id !== id));
+  } catch {
+    Alert.alert('Erro', 'Não foi possível excluir.');
+  }
+};
+
   const fetchFilmes = async () => {
     setLoading(true);
     try {
@@ -40,7 +50,7 @@ export default function ListarFilmesAdminScreen() {
         <TouchableOpacity style={styles.btnEditar}>
           <Text style={styles.btnText}>Editar</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btnExcluir}>
+        <TouchableOpacity style={styles.btnExcluir} onPress={() => handleDelete(item.id)}>
           <Text style={styles.btnText}>Excluir</Text>
         </TouchableOpacity>
       </View>
@@ -63,7 +73,7 @@ export default function ListarFilmesAdminScreen() {
           />
       }
       <TouchableOpacity style={styles.fab}
-        onPress={() => router.push('/(drawer)/admin/cadastrar-filme')}>
+        onPress={() => router.push('/(drawer)/admin/cadastrar-filme' as Href)}>
         <Ionicons name="add" size={28} color="#fff" />
       </TouchableOpacity>
     </View>

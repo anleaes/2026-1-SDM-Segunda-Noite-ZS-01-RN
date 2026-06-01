@@ -1,5 +1,4 @@
-import { useFocusEffect } from 'expo-router';
-import { useRouter } from 'expo-router';
+import { Href, useFocusEffect, useRouter } from 'expo-router';
 import React, { useCallback, useState } from 'react';
 import {
   ActivityIndicator, Alert, ScrollView,
@@ -43,7 +42,7 @@ export default function CadastrarFilmeScreen() {
       });
       if (response.ok) {
         Alert.alert('Sucesso', 'Filme cadastrado!');
-        router.push('/(drawer)/admin/listar-filmes');
+        router.push('/(drawer)/admin/listar-filmes' as Href);
       } else {
         Alert.alert('Erro', 'Não foi possível cadastrar.');
       }
@@ -83,7 +82,7 @@ export default function CadastrarFilmeScreen() {
           </TouchableOpacity>
       }
       <TouchableOpacity style={styles.btnVoltar}
-        onPress={() => router.push('/(drawer)/admin/listar-filmes')}>
+        onPress={() => router.push('/(drawer)/admin/listar-filmes' as Href)}>
         <Text style={[styles.btnTexto, { color: '#ccc' }]}>Voltar</Text>
       </TouchableOpacity>
     </ScrollView>
