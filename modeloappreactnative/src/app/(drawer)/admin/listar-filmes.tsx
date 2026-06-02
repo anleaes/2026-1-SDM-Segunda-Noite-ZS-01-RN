@@ -1,7 +1,10 @@
+
 import { Ionicons } from '@expo/vector-icons';
 import { Alert } from 'react-native'
 import { Href, useFocusEffect, useRouter } from 'expo-router';
 import React, { useCallback, useState } from 'react';
+
+import { useAuth } from '@/contexts/AuthContext';
 import {
   ActivityIndicator, FlatList, StyleSheet,
   Text, TouchableOpacity, View,
@@ -19,6 +22,7 @@ type Filme = {
 
 export default function ListarFilmesAdminScreen() {
   const router = useRouter();
+  const { user } = useAuth();
   const [filmes, setFilmes] = useState<Filme[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -40,14 +44,37 @@ export default function ListarFilmesAdminScreen() {
     finally { setLoading(false); }
   };
 
-  useFocusEffect(useCallback(() => { fetchFilmes(); }, []));
+  useFocusEffect(useCallback(() => {
+    if (user.tipo === 'administrador') {
+      fetchFilmes();
+      return;
+    }
+
+    if (user.tipo === 'cliente') {
+      router.replace('/(drawer)/cliente/listar-filmes' as Href);
+      return;
+    }
+
+    router.replace('/login' as Href);
+  }, [router, user.tipo]));
 
   const renderItem = ({ item }: { item: Filme }) => (
     <View style={styles.card}>
       <Text style={styles.cardTitulo}>{item.titulo}</Text>
       <Text style={styles.cardInfo}>⏱ {item.duracao} min  ·  🎬 {item.classificacao}</Text>
       <View style={styles.cardActions}>
-        <TouchableOpacity style={styles.btnEditar}>
+        <TouchableOpacity
+          style={styles.btnEditar}
+          onPress={() => router.push({
+            pathname: '/(drawer)/admin/editar-filme',
+            params: {
+              id: String(item.id),
+              titulo: item.titulo,
+              duracao: String(item.duracao),
+              classificacao: item.classificacao,
+              genero: String(item.genero ?? ''),
+            },
+          } as unknown as Href)}>
           <Text style={styles.btnText}>Editar</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.btnExcluir} onPress={() => handleDelete(item.id)}>
