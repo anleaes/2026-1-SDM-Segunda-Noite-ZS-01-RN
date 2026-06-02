@@ -1,102 +1,67 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
-import { Href, Redirect } from 'expo-router';
-
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
-  return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
+import { Ionicons } from '@expo/vector-icons';
+import { Href, useRouter } from 'expo-router';
+import React from 'react';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function HomeScreen() {
+  const router = useRouter();
+
   return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+    <ScrollView style={styles.container}>
+      <View style={styles.banner}>
+        <Text style={styles.bannerEmoji}>🎬</Text>
+        <Text style={styles.bannerTitle}>CinemaApp</Text>
+        <Text style={styles.bannerSub}>Sua experiência no cinema começa aqui</Text>
+      </View>
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+      <Text style={styles.sectionTitle}>Para clientes</Text>
+      <View style={styles.grid}>
+        <TouchableOpacity style={styles.gridCard}
+          onPress={() => router.push('/(drawer)/cliente/listar-filmes' as Href)}> 
+          <Ionicons name="film-outline" size={32} color="#c40000" />
+          <Text style={styles.gridText}>Ver filmes</Text>
+        </TouchableOpacity>
+      </View>
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
+      <Text style={styles.sectionTitle}>Administração</Text>
+      <View style={styles.grid}>
+        <TouchableOpacity style={styles.gridCard}
+          onPress={() => router.push('/(drawer)/admin/listar-filmes' as Href)}>
+          <Ionicons name="film-outline" size={28} color="#c40000" />
+          <Text style={styles.gridText}>Gerenciar filmes</Text>
+        </TouchableOpacity>
 
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+        <TouchableOpacity style={styles.gridCard}
+          onPress={() => router.push('/(drawer)/admin/listar-assentos' as Href)}>
+          <Ionicons name="grid-outline" size={28} color="#c40000" />
+          <Text style={styles.gridText}>Gerenciar assentos</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.gridCard}
+          onPress={() => router.push('/(drawer)/admin/cadastrar-usuario' as Href)}>
+          <Ionicons name="person-add-outline" size={28} color="#c40000" />
+          <Text style={styles.gridText}>Novo usuário</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
-}
-export function Index() {
-  return <Redirect href="/(drawer)" />;
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
+  container: { flex: 1, backgroundColor: '#0f0f0f' },
+  banner: { backgroundColor: '#c40000', padding: 32, alignItems: 'center' },
+  bannerEmoji: { fontSize: 48, marginBottom: 8 },
+  bannerTitle: { fontSize: 28, fontWeight: 'bold', color: '#fff' },
+  bannerSub: { fontSize: 14, color: 'rgba(255,255,255,0.85)', marginTop: 4 },
+  sectionTitle: {
+    fontSize: 18, fontWeight: '700', color: '#fff',
+    marginTop: 20, marginBottom: 10, paddingHorizontal: 16,
   },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
+  grid: { flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: 12, gap: 8 },
+  gridCard: {
+    backgroundColor: '#1a1a1a', borderRadius: 12, padding: 20,
+    alignItems: 'center', flex: 1, minWidth: 120, margin: 4, elevation: 2,
+    borderWidth: 1, borderColor: '#2a2a2a',
   },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
-  },
-  title: {
-    textAlign: 'center',
-  },
-  code: {
-    textTransform: 'uppercase',
-  },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
-  },
+  gridText: { marginTop: 8, fontSize: 13, fontWeight: '600', color: '#fff', textAlign: 'center' },
 });
