@@ -1,4 +1,4 @@
-import { Href, useFocusEffect, useRouter } from 'expo-router';
+
 import React, { useCallback, useState } from 'react';
 import {
   ActivityIndicator, Alert, ScrollView,
@@ -6,8 +6,11 @@ import {
 } from 'react-native';
 
 import { API_URL } from '@/constants/api';
+import { useAdminGuard } from '@/hooks/useAdminGuard';
+import { Href, useFocusEffect, useRouter } from 'expo-router';
 
 export default function CadastrarFilmeScreen() {
+  useAdminGuard();
   const router = useRouter();
   const [titulo, setTitulo] = useState('');
   const [generoId, setGeneroId] = useState('');
