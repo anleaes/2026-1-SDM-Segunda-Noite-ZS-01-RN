@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Drawer } from 'expo-router/drawer';
 import React from 'react';
-import CustomDrawerContent from '../../components/CustomDrawerContent';
+import CustomDrawerContent from '../components/CustomDrawerContent';
 
 export default function DrawerLayout() {
   return (
