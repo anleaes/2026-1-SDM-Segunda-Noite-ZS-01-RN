@@ -5,9 +5,12 @@ import {
   StyleSheet, Text, TextInput, TouchableOpacity,
 } from 'react-native';
 
+import { useAdminGuard } from '@/hooks/useAdminGuard';
+
 import { API_URL } from '@/constants/api';
 
 export default function CriarAssentoScreen() {
+  useAdminGuard();
   const router = useRouter();
   const [salaId, setSalaId] = useState('');
   const [numero, setNumero] = useState('');
