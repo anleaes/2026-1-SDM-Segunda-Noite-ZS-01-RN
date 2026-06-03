@@ -29,7 +29,11 @@ export default function CriarAssentoScreen() {
     try {
       const res = await fetch(`${API_URL}/assentos/assentos/`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        credentials: 'include',
         body: JSON.stringify({ id_sala: Number(salaId), numero: Number(numero), fila: fila.toUpperCase(), status: true }),
       });
       if (res.ok) {
