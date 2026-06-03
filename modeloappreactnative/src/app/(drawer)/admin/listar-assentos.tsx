@@ -6,6 +6,8 @@ import {
   Text, TouchableOpacity, View,
 } from 'react-native';
 
+import { useAdminGuard } from '@/hooks/useAdminGuard';
+
 import { API_URL } from '@/constants/api';
 
 export type Assento = {
@@ -16,24 +18,41 @@ export type Assento = {
   id_sala: number;
 };
 
+export type Sala = {
+  id: number;
+  numero: number;
+};
+
 const statusColor = (status: boolean) =>
-  status ? '#155724' : '#721c24';  
+  status ? '#155724' : '#721c24'; 
 
 const statusLabel = (status: boolean) =>
   status ? 'disponivel' : 'indisponivel';
 
 export default function ListarAssentosScreen() {
+  useAdminGuard();
   const router = useRouter();
   const [assentos, setAssentos] = useState<Assento[]>([]);
+  const [salas, setSalas] = useState<Sala[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchAssentos = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${API_URL}/assentos/assentos/`);
-      setAssentos(await res.json());
-    } catch { setAssentos([]); }
-    finally { setLoading(false); }
+      const [resAssentos, resSalas] = await Promise.all([
+        fetch(`${API_URL}/assentos/assentos/`),
+        fetch(`${API_URL}/salas/`),
+      ]);
+      const [assentosData, salasData] = await Promise.all([
+        resAssentos.json(),
+        resSalas.json(),
+      ]);
+      setAssentos(assentosData);
+      setSalas(salasData);
+    } catch {
+      setAssentos([]);
+      setSalas([]);
+    } finally { setLoading(false); }
   };
 
   useFocusEffect(useCallback(() => { fetchAssentos(); }, []));
@@ -46,6 +65,7 @@ export default function ListarAssentosScreen() {
           <Text style={styles.badgeText}>{statusLabel(item.status)}</Text>
         </View>
       </View>
+      <Text style={styles.cardInfo}>Vinculado à Sala {salas.find((s) => s.id === item.id_sala)?.numero ?? item.id_sala}</Text>
       <TouchableOpacity style={styles.btnMudar}
         onPress={() => router.push({
           pathname: '/(drawer)/admin/mudar-status-assento',
@@ -82,6 +102,7 @@ const styles = StyleSheet.create({
   card: { backgroundColor: '#1a1a1a', padding: 16, borderRadius: 10, marginBottom: 12, elevation: 2, borderWidth: 1, borderColor: '#2a2a2a' },
   cardRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   cardTitulo: { fontSize: 16, fontWeight: '600', color: '#fff', flex: 1 },
+  cardInfo: { color: '#ccc', marginTop: 6, fontSize: 13 },
   badge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 20 },
   badgeText: { color: '#fff', fontSize: 12, fontWeight: '600' },
   btnMudar: { backgroundColor: '#c40000', padding: 8, borderRadius: 6, marginTop: 10, alignItems: 'center' },
