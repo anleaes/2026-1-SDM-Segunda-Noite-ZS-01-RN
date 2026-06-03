@@ -64,7 +64,7 @@ export default function ListarSalasScreen() {
               <View style={styles.cardActions}>
                 <TouchableOpacity
                   style={styles.btnEditar}
-                  onPress={() => router.push({ pathname: '/(drawer)/admin/editar-sala', params: { id: String(item.id), numero: String(item.numero), capacidade: String(item.capacidade), sala3D: String(item.sala3D) } } as Href)}
+                  onPress={() => router.push({ pathname: '/(drawer)/admin/editar-sala' as any, params: { id: String(item.id), numero: String(item.numero), capacidade: String(item.capacidade), sala3D: String(item.sala3D) } })}
                 >
                   <Text style={styles.btnText}>Editar</Text>
                 </TouchableOpacity>
@@ -83,3 +83,15 @@ export default function ListarSalasScreen() {
   );
 }
 
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: '#0f0f0f', paddingHorizontal: 16, paddingTop: 16 },
+  title: { fontSize: 22, fontWeight: '700', color: '#ff2d2d', alignSelf: 'center', marginBottom: 12 },
+  card: { backgroundColor: '#1a1a1a', borderRadius: 10, padding: 14, marginBottom: 12, borderWidth: 1, borderColor: '#2a2a2a' },
+  cardTitle: { color: '#fff', fontSize: 17, fontWeight: '700' },
+  cardText: { color: '#ccc', marginTop: 4 },
+  cardActions: { flexDirection: 'row', marginTop: 10, gap: 8 },
+  btnEditar: { flex: 1, backgroundColor: '#c40000', paddingVertical: 8, borderRadius: 8, alignItems: 'center' },
+  btnExcluir: { flex: 1, backgroundColor: '#7a0000', paddingVertical: 8, borderRadius: 8, alignItems: 'center' },
+  btnText: { color: '#fff', fontWeight: '600' },
+  fab: { position: 'absolute', right: 20, bottom: 20, backgroundColor: '#c40000', borderRadius: 28, padding: 14, elevation: 4 },
+});
