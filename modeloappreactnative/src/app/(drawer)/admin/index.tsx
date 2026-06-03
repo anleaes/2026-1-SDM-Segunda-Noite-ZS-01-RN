@@ -41,12 +41,12 @@ export default function AdminHomeScreen() {
           <Text style={styles.cardText}>Gerenciar Assentos</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.card} onPress={() => router.push({ pathname: '/(drawer)/admin/cadastrar-usuario', params: { tipo: 'cliente' } } as Href)}>
+        <TouchableOpacity style={styles.card} onPress={() => router.push({ pathname: '/(drawer)/admin/cadastrar-usuario', params: { tipo: 'cliente' } } as unknown as Href)}>
           <Ionicons name="person-add-outline" size={28} color="#c40000" />
           <Text style={styles.cardText}>Cadastrar Cliente</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.card} onPress={() => router.push({ pathname: '/(drawer)/admin/cadastrar-usuario', params: { tipo: 'administrador' } } as Href)}>
+        <TouchableOpacity style={styles.card} onPress={() => router.push({ pathname: '/(drawer)/admin/cadastrar-usuario', params: { tipo: 'administrador' } } as unknown as Href)}>
           <Ionicons name="shield-checkmark-outline" size={28} color="#c40000" />
           <Text style={styles.cardText}>Cadastrar Administrador</Text>
         </TouchableOpacity>

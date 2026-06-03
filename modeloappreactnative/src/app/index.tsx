@@ -3,8 +3,11 @@ import { Href, useRouter } from 'expo-router';
 import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
+import { useAuth } from '@/contexts/AuthContext';
+
 export default function HomeScreen() {
   const router = useRouter();
+  const { user } = useAuth();
 
   return (
     <ScrollView style={styles.container}>
@@ -17,32 +20,48 @@ export default function HomeScreen() {
       <Text style={styles.sectionTitle}>Para clientes</Text>
       <View style={styles.grid}>
         <TouchableOpacity style={styles.gridCard}
-          onPress={() => router.push('/(drawer)/cliente/listar-filmes' as Href)}> 
-          <Ionicons name="film-outline" size={32} color="#c40000" />
-          <Text style={styles.gridText}>Ver filmes</Text>
+          onPress={() => router.push('/login' as Href)}>
+          <Ionicons name="log-in-outline" size={32} color="#c40000" />
+          <Text style={styles.gridText}>Entrar</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.gridCard}
+          onPress={() => router.push('/register' as Href)}>
+          <Ionicons name="person-add-outline" size={32} color="#c40000" />
+          <Text style={styles.gridText}>Cadastrar</Text>
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.sectionTitle}>Administração</Text>
-      <View style={styles.grid}>
-        <TouchableOpacity style={styles.gridCard}
-          onPress={() => router.push('/(drawer)/admin/listar-filmes' as Href)}>
-          <Ionicons name="film-outline" size={28} color="#c40000" />
-          <Text style={styles.gridText}>Gerenciar filmes</Text>
-        </TouchableOpacity>
+      {user.tipo === 'administrador' && (
+        <>
+          <Text style={styles.sectionTitle}>Administração</Text>
+          <View style={styles.grid}>
+            <TouchableOpacity style={styles.gridCard}
+              onPress={() => router.push({ pathname: '/(drawer)/admin/cadastrar-usuario', params: { tipo: 'cliente' } } as unknown as Href)}>
+              <Ionicons name="person-add-outline" size={28} color="#c40000" />
+              <Text style={styles.gridText}>Criar cliente</Text>
+            </TouchableOpacity>
 
-        <TouchableOpacity style={styles.gridCard}
-          onPress={() => router.push('/(drawer)/admin/listar-assentos' as Href)}>
-          <Ionicons name="grid-outline" size={28} color="#c40000" />
-          <Text style={styles.gridText}>Gerenciar assentos</Text>
-        </TouchableOpacity>
+            <TouchableOpacity style={styles.gridCard}
+              onPress={() => router.push({ pathname: '/(drawer)/admin/cadastrar-usuario', params: { tipo: 'administrador' } } as unknown as Href)}>
+              <Ionicons name="shield-checkmark-outline" size={28} color="#c40000" />
+              <Text style={styles.gridText}>Criar admin</Text>
+            </TouchableOpacity>
 
-        <TouchableOpacity style={styles.gridCard}
-          onPress={() => router.push('/(drawer)/admin/cadastrar-usuario' as Href)}>
-          <Ionicons name="person-add-outline" size={28} color="#c40000" />
-          <Text style={styles.gridText}>Novo usuário</Text>
-        </TouchableOpacity>
-      </View>
+            <TouchableOpacity style={styles.gridCard}
+              onPress={() => router.push('/(drawer)/admin/listar-filmes' as Href)}>
+              <Ionicons name="film-outline" size={28} color="#c40000" />
+              <Text style={styles.gridText}>Gerenciar filmes</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.gridCard}
+              onPress={() => router.push('/(drawer)/admin/listar-assentos' as Href)}>
+              <Ionicons name="grid-outline" size={28} color="#c40000" />
+              <Text style={styles.gridText}>Gerenciar assentos</Text>
+            </TouchableOpacity>
+          </View>
+        </>
+      )}
     </ScrollView>
   );
 }
