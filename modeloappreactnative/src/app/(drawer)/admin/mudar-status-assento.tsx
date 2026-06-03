@@ -4,9 +4,11 @@ import {
   ActivityIndicator, Alert, StyleSheet,
   Text, TouchableOpacity, View,
 } from 'react-native';
+import { useAdminGuard } from '@/hooks/useAdminGuard';
 
 import { API_URL } from '@/constants/api';
 export default function MudarStatusAssentoScreen() {
+  useAdminGuard();
   const router = useRouter();
   const { id, numero, fila, status: statusParam } = useLocalSearchParams<{
     id: string; numero: string; fila: string; status: string;
@@ -69,6 +71,7 @@ export default function MudarStatusAssentoScreen() {
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#0f0f0f', padding: 16 },
