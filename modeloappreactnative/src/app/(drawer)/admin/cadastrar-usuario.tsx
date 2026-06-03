@@ -1,4 +1,5 @@
-import { useFocusEffect, useRouter } from 'expo-router';
+
+import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useCallback, useState } from 'react';
 import {
   ActivityIndicator, Alert, ScrollView,
@@ -6,15 +7,21 @@ import {
 } from 'react-native';
 
 import { API_URL } from '@/constants/api';
+import { useAdminGuard } from '@/hooks/useAdminGuard';
 
 export default function CadastrarUsuarioScreen() {
+  useAdminGuard();
   const router = useRouter();
+  const params = useLocalSearchParams<{ tipo?: string | string[] }>();
+  const tipoParam = Array.isArray(params.tipo) ? params.tipo[0] : params.tipo;
+  const isAdmin = String(tipoParam ?? 'cliente').toLowerCase() === 'administrador';
   const [nome, setNome] = useState('');
   const [cpf, setCpf] = useState('');
   const [email, setEmail] = useState('');
   const [telefone, setTelefone] = useState('');
   const [senha, setSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
+  const [nivelAcesso, setNivelAcesso] = useState('01');
   const [saving, setSaving] = useState(false);
 
   useFocusEffect(useCallback(() => {
@@ -31,13 +38,22 @@ export default function CadastrarUsuarioScreen() {
     }
     setSaving(true);
     try {
-      const res = await fetch(`${API_URL}/clientes/clientes/`, {
+      const endpoint = isAdmin
+        ? `${API_URL}/administrador/administrador/`
+        : `${API_URL}/clientes/clientes/`;
+
+      const body: any = { nome, cpf, email, senha, telefone };
+      if (isAdmin) {
+        body.nivel_acesso = nivelAcesso;
+      }
+
+      const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nome, cpf, email, senha, telefone }),
+        body: JSON.stringify(body),
       });
       if (res.ok) {
-        Alert.alert('Sucesso', 'Usuário cadastrado!');
+        Alert.alert('Sucesso', isAdmin ? 'Administrador cadastrado!' : 'Cliente cadastrado!');
         router.back();
       } else {
         Alert.alert('Erro', 'Não foi possível cadastrar.');
@@ -49,7 +65,7 @@ export default function CadastrarUsuarioScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>Cadastrar Usuário</Text>
+      <Text style={styles.title}>{isAdmin ? 'Cadastrar Administrador' : 'Cadastrar Cliente'}</Text>
 
       <Text style={styles.label}>Nome completo *</Text>
       <TextInput value={nome} onChangeText={setNome} style={styles.input}
@@ -78,6 +94,14 @@ export default function CadastrarUsuarioScreen() {
       <TextInput value={confirmarSenha} onChangeText={setConfirmarSenha}
         style={styles.input} secureTextEntry
         placeholder="Repita a senha" placeholderTextColor="#555" />
+
+      {isAdmin && (
+        <>
+          <Text style={styles.label}>Nível de acesso *</Text>
+          <TextInput value={nivelAcesso} onChangeText={setNivelAcesso} style={styles.input}
+            placeholder="Ex: 01" placeholderTextColor="#555" />
+        </>
+      )}
 
       {saving
         ? <ActivityIndicator size="large" color="#ff2d2d" style={{ marginTop: 20 }} />
