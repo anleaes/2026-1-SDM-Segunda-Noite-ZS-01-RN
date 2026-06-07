@@ -64,7 +64,6 @@ export default function CadastrarFilmeScreen() {
         placeholder="Ex: Vingadores" placeholderTextColor="#aaa" />
 
       <Text style={styles.label}>ID do Gênero</Text>
-      {/* Consulte /generos/ no backend para obter os IDs disponíveis */}
       <TextInput value={generoId} onChangeText={setGeneroId} style={styles.input}
         placeholder="Ex: 1" placeholderTextColor="#aaa" keyboardType="numeric" />
 

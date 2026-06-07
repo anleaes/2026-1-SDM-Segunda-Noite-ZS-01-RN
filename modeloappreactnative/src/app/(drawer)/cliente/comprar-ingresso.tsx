@@ -33,7 +33,7 @@ export default function ComprarIngressoScreen() {
     try {
       const res = await fetch(`${API_URL}/assentos/assentos/`);
       const todos: AssentoDisponivel[] = await res.json();
-      setAssentos(todos.filter(a => a.status));
+      setAssentos(todos.filter(a => !a.status));
     } catch { setAssentos([]); }
     finally { setLoading(false); }
   };
